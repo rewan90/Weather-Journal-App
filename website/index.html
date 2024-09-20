@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Journal App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Weather Journal App</h1>
+    <div class="cords">
+      <input id="lat" type="text" placeholder="Enter latitude here" />
+      <input id="lon" type="text" placeholder="Enter longitude here" />
+    </div>
+    <div class="city">
+      <input id="city" type="text" placeholder="Enter city name" />
+    </div>
+    <div class="zip-and-country">
+      <input id="zip" type="text" placeholder="Enter zip code" />
+      <input id="country" type="text" placeholder="Enter country code" />
+    </div>
+    <button id="generate">Generate</button>
+
+    <div id="entryHolder">
+      <div id="name"></div>
+      <div id="country"></div>
+
+      <div id="date"></div>
+      <div id="temp"></div>
+      <div id="content"></div>
+      <div id="timezone"></div>
+      <div id="zip"></div>
+      <div id="lat"></div>
+      <div id="lon"></div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
