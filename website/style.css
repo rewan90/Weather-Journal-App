@@ -8,7 +8,7 @@ input{
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 1.2rem;
-  width: 200px;
+  width: 350px;
 
 }
 
@@ -24,8 +24,11 @@ input{
 #temp,
 #content,
 #name,
-#timezone,
-#country {
+#time-zone,
+#weather,
+#content,
+#country
+ {
   margin-bottom: 10px;
   font-size: large;
   
@@ -43,7 +46,43 @@ input{
   font-size: 1.2rem;
 
 }
+.feelings{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px;
+  justify-content: center;
+
+}
+#feelings{
+  width: 300px;
+  height: 100px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1.2rem;
+  padding: 10px;
+  margin: 10px;
+  display: flex-inline;
+  justify-content: center;
+  align-items: center;
+
+
+}
 
 #generate:hover {
   background-color: #000000;
+}
+footer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px;
+  padding: 20px;
+  justify-content: center;
+}
+.footer{
+  margin: 10px;
+  font-weight: bold;
+
 }

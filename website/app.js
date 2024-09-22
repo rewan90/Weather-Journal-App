@@ -1,84 +1,66 @@
 const apiKey = "af69be529eeee203c8d68060cf7689b5&units=imperial";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
-const zipapiUrl = "http://api.openweathermap.org/geo/1.0/zip";
+const serverUrl = "http://localhost:3000/api/projectData";
 
-document.getElementById("generate").addEventListener("click", async () => {
-  const lat = document.getElementById("lat").value;
-  const lon = document.getElementById("lon").value;
-
+async function getWeatherData(zip) {
   try {
-    const response = await fetch(
-      `${apiUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}`
-    );
+    const response = await fetch(`${apiUrl}?zip=${zip}&appid=${apiKey}`);
     const data = await response.json();
-
-    const date = new Date();
-    const temperature = data.main.temp;
-    const weatherDescription = data.weather[0].description;
-    const name = data.name;
-    const timezone = data.timezone;
-
-    document.getElementById("name").innerHTML = `Name: ${name}`;
-    document.getElementById("timezone").innerHTML = `Timezone: ${timezone}`;
-    document.getElementById(
-      "date"
-    ).innerHTML = `Date: ${date.toLocaleDateString()}`;
-    document.getElementById("temp").innerHTML = `Temperature: ${temperature}°`;
-    document.getElementById(
-      "content"
-    ).innerHTML = `Weather: ${weatherDescription}`;
+    console.log("Weather data:", data);
+    return data;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching weather data:", error);
+    throw error;
   }
-});
+}
 
-//city name
-
-document.getElementById("generate").addEventListener("click", async () => {
-  const city = document.getElementById("city").value;
-
+async function postData(path, data) {
   try {
-    const response = await fetch(`${apiUrl}?q=${city}&appid=${apiKey}`);
-    const data = await response.json();
-
-    const date = new Date();
-    const temperature = data.main.temp;
-    const weatherDescription = data.weather[0].description;
-    const name = data.name;
-    const timezone = data.timezone;
-
-    document.getElementById("name").innerHTML = `name: ${name}`;
-    document.getElementById("timezone").innerHTML = `timezone: ${timezone}`;
-    document.getElementById(
-      "date"
-    ).innerHTML = `Date: ${date.toLocaleDateString()}`;
-    document.getElementById("temp").innerHTML = `Temperature: ${temperature}°C`;
-    document.getElementById(
-      "content"
-    ).innerHTML = `Weather: ${weatherDescription}`;
+    const response = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    console.log("Post data result:", result);
+    return result;
   } catch (error) {
-    console.error(error);
+    console.error("Error posting data:", error);
+    throw error;
   }
-});
-//zip code
+}
 
-document.getElementById("generate").addEventListener("click", async () => {
-  const zip = document.getElementById("zip").value;
 
+
+
+async function updateUI() {
   try {
-    const response = await fetch(`${zipapiUrl}?zip=${zip}&appid=${apiKey}`);
+    const response = await fetch(serverUrl);
     const data = await response.json();
-
-    const name = data.name;
-    const country = data.country;
-    const latitude = data.lat;
-    const longitude = data.lon;
-
-    document.getElementById("name").innerHTML = `name: ${name}`;
-    document.getElementById("country").innerHTML = `country: ${country}`;
-    document.getElementById("lat").innerHTML = `latitude: ${latitude}`;
-    document.getElementById("lon").innerHTML = `longitude: ${longitude}`;
+    const date = new Date();
+    data.date = date;
+    console.log("UI data:", data);
+    document.getElementById("time-zone").innerHTML = `Time Zone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+    document.getElementById("date").innerHTML = `Date: ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+    document.getElementById("temp").innerHTML = `Temperature: ${data.temperature}°F`;
+    document.getElementById("content").innerHTML = `feelings: ${data.userResponse}`;
   } catch (error) {
-    console.error(error);
+    console.error("Error updating UI:", error);
+    throw error;
+  }
+}
+document.getElementById("generate").addEventListener("click", async () => {
+  try {
+    const zip = document.getElementById("zip").value;
+    const weatherData = await getWeatherData(zip);
+    const temperature = weatherData.main.temp;
+    const date = new Date();
+    const userResponse = document.getElementById("feelings").value;
+    const data = { temperature, date, userResponse };
+    await postData(serverUrl, data);
+    await updateUI();
+  } catch (error) {
+    console.error("Error generating data:", error);
+    alert("An error occurred. Please try again.");
   }
 });
